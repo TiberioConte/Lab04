@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04.DAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,23 +18,33 @@ public class CorsoDAO {
 	 * Ottengo tutti i corsi salvati nel Db
 	 */
 	public List<Corso> getTuttiICorsi() {
-
+		
 		final String sql = "SELECT * FROM corso";
 
 		List<Corso> corsi = new LinkedList<Corso>();
 
 		try {
+			
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
-
+			
 			ResultSet rs = st.executeQuery();
-
+			
 			while (rs.next()) {
 
-				// Crea un nuovo JAVA Bean Corso
-				// Aggiungi il nuovo Corso alla lista
+				String codice=rs.getString("codins");
+				
+				int  crediti=rs.getInt("crediti");
+				
+				String nome=rs.getString("nome");
+				
+				int  periodo=rs.getInt("pd");
+				
+				Corso temp=new Corso(codice,crediti,nome,periodo);
+				
+				corsi.add(temp);
 			}
-
+			conn.close();
 			return corsi;
 
 		} catch (SQLException e) {
@@ -52,8 +63,48 @@ public class CorsoDAO {
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
+	public LinkedList<Studente> getStudentiIscrittiAlCorso(Corso corso) {
 		// TODO
+		final String sql = "SELECT iscrizione.matricola,cognome,nome "+
+							"FROM   iscrizione,studente "+
+							"WHERE  studente.matricola=iscrizione.matricola and codins=?";
+
+		List<Studente> studenti = new LinkedList<Studente>();
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setString(1,corso.getCodice());
+			ResultSet rs = st.executeQuery();
+			
+
+			while (rs.next()) {
+
+				String matricola=rs.getString("matricola");
+				String nome=rs.getString("nome");
+				String cognome=rs.getString("cognome");
+				
+				
+				Studente temp=new Studente(matricola,nome,cognome);
+				
+				studenti.add(temp);
+			}
+			conn.close();
+			return (LinkedList<Studente>) studenti;
+			
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			//throw new RuntimeException("Errore Db");
+			return null;
+		}	
+		
+		
+		
+		
+		
+		
 	}
 
 	/*

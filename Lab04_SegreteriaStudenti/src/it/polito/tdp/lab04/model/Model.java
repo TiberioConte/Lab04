@@ -30,6 +30,13 @@ public class Model {
 		StudenteDAO dao=new StudenteDAO();
 		return dao.CorsiStudente(studente);
 	}
+
+	public void iscriviStudente(Studente studente, Corso corso) {
+		// TODO Auto-generated method stub
+		CorsoDAO dao=new CorsoDAO();
+		dao.inscriviStudenteACorso(studente,corso);
+		
+	}
 	
 	
 	

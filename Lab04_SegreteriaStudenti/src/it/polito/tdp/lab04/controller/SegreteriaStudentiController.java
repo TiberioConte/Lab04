@@ -73,8 +73,15 @@ public class SegreteriaStudentiController {
         		return;
         	}
     	LinkedList<Corso> corsi=model.tuttiICorsiDelloStudente(temp);
+    	if(ComboCorso.getValue()==null){
     	for(Corso c:corsi ){
     		txtResult.appendText(c+"\n");
+    	}}
+    	else{
+    		if(corsi.contains(ComboCorso.getValue()))
+    			txtResult.appendText("Studente già iscritto a questo corso\n");
+    		else
+    			txtResult.appendText("Studente non ancora iscritto a questo corso\n");
     	}
     	
 
@@ -112,6 +119,19 @@ public class SegreteriaStudentiController {
 
     @FXML
     void doIscrivi(ActionEvent event) {
+    	String matricola=txtMatricola.getText();
+    	Studente studente=model.cercaStudentePerMatricola(matricola);
+    	if(studente==null){
+        		txtResult.appendText("matrcola errata\n");	
+        		return;
+        	}
+    	Corso corso= ComboCorso.getValue();
+    	if(corso==null){
+    		txtResult.appendText("Inserire il corso \n");
+    		return;
+    	}
+    	model.iscriviStudente(studente,corso);
+    	
 
     }
 

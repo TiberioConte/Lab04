@@ -73,9 +73,11 @@ public class CorsoDAO {
 
 		try {
 			Connection conn = ConnectDB.getConnection();
+			
 			PreparedStatement st = conn.prepareStatement(sql);
 			
 			st.setString(1,corso.getCodice());
+			
 			ResultSet rs = st.executeQuery();
 			
 
@@ -99,12 +101,6 @@ public class CorsoDAO {
 			//throw new RuntimeException("Errore Db");
 			return null;
 		}	
-		
-		
-		
-		
-		
-		
 	}
 
 	/*
@@ -112,7 +108,27 @@ public class CorsoDAO {
 	 * iscrivi lo studente al corso.
 	 */
 	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
-		return false;
+		final String sql = "INSERT INTO `iscritticorsi`.`iscrizione` (`matricola`, `codins`) VALUES (?, ?)";
+		
+		try {
+			
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1,studente.getMatricola());
+			st.setString(2,corso.getCodice());
+			int i=st.executeUpdate();
+			conn.close();
+			if(i==1)
+				return true;
+			
+			return false;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+
+
+		
 	}
+
 }

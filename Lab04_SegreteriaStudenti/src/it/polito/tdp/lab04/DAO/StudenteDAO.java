@@ -16,16 +16,16 @@ public class StudenteDAO {
 		Studente s=null;
 		String sql="select matricola,cognome,nome "+
 					"from studente "+
-					"where matricola=?";
+					"where matricola='146101'";
 		try {
 			
 			Connection conn = ConnectDB.getConnection();
-			System.out.println("eeeeeeeeeeeeeeeee6");
-			PreparedStatement st = conn.prepareStatement(sql);
-			System.out.println("eeeeeeeeeeeeeeeee5");
-			st.setString(1, matricola);
 			
-			ResultSet rs = st.executeQuery();
+			PreparedStatement ste = conn.prepareStatement(sql);
+			
+			ste.setString(1, matricola);
+			
+			ResultSet rs = ste.executeQuery();
 			
 			if(rs.next()){
 				 s= new Studente(
@@ -80,8 +80,7 @@ public class StudenteDAO {
 		//throw new RuntimeException("Errore Db");
 		return null;
 		}	
-			}
-			
-		
+	}
 
 }
+			
